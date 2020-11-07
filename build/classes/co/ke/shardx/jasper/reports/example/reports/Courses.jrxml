@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bcb68755-42a1-4237-8bb1-62dd076486fe">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="courseid" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CourseFormat" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Level" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from courses]]>
+	</queryString>
+	<field name="CourseID" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Level" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DeptID" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CourseName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="courseFormat" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="slug" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Requirement" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="AltRequirement" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Accreditor" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Examiner" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="24" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="44" splitType="Stretch">
+			<staticText>
+				<reportElement x="226" y="15" width="144" height="20" uuid="6bea35bd-f2cd-49a0-935e-c224a8ccf349"/>
+				<text><![CDATA[REGISTERED COURSES ]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="67" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="41" width="32" height="20" uuid="05593663-2505-4240-a485-8d02a7b68f9a"/>
+				<text><![CDATA[C. ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="41" width="100" height="20" uuid="0175c0de-0edb-4b48-83c0-aa58492f8aac"/>
+				<text><![CDATA[CourseName]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="367" y="41" width="56" height="20" uuid="1b98dbf4-4ab9-4718-9609-9139251f5f99"/>
+				<text><![CDATA[Level]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="423" y="41" width="72" height="20" uuid="0118d501-0f9e-4f1b-9864-1e9909723245"/>
+				<text><![CDATA[Format]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="495" y="41" width="60" height="20" uuid="2d605882-5310-4972-8e6c-2a2673522710"/>
+				<text><![CDATA[Accreditor]]></text>
+			</staticText>
+			<line>
+				<reportElement x="7" y="61" width="548" height="1" uuid="9f976985-8012-4e20-9a3d-3e690eb6870b"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="7" y="0" width="22" height="20" uuid="138293ba-a3ef-4190-93a4-d72a1a1cf738"/>
+				<textFieldExpression><![CDATA[$F{CourseID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="42" y="0" width="325" height="20" uuid="543a05ea-f3db-4b5a-b564-630b84cac705"/>
+				<textFieldExpression><![CDATA[$F{CourseName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="367" y="0" width="56" height="20" uuid="d4c2e4b3-53df-4611-afd4-7963986c3a22"/>
+				<textFieldExpression><![CDATA[$F{Level}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="423" y="0" width="61" height="20" uuid="b38f1852-1521-403b-ae9f-fb5925c9608d"/>
+				<textFieldExpression><![CDATA[$F{courseFormat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="495" y="0" width="48" height="20" uuid="d05c6afa-0352-4b52-a4d4-21182ae848a5"/>
+				<textFieldExpression><![CDATA[$F{Accreditor}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="7" y="20" width="548" height="1" uuid="62d8e491-5700-4d77-85f9-049753d058fa"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="53" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
