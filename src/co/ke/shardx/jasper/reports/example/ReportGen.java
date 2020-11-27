@@ -7,6 +7,8 @@ package co.ke.shardx.jasper.reports.example;
 
 import java.awt.BorderLayout;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -182,12 +184,23 @@ public class ReportGen extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
 
+        
         resetPanel();
         Connection cnn = Connect.getConnection();
+        String reportPath = "reports/Courses3.jrxml";
+//      InputStream inputStream = this.getClass().getResourceAsStream(reportPath);
+//       System.out.println(inputStream != null);
+      try {
+//             String url = this.getClass().getResource("reports/Courses3.jrxml").getPath();
+//        System.out.println(">>>"+url);
+//      }catch (Exception ex){
+//          System.out.println(ex.getMessage());
+//      }
+//     try { 
+         //JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+       JasperReport jr = JasperCompileManager.compileReport(getClass().getResourceAsStream(reportPath));
 
-        String reportPath = "src\\co\\ke\\shardx\\jasper\\reports\\example\\reports\\Courses1.jrxml";
-        try {
-            JasperReport jr = JasperCompileManager.compileReport(reportPath);
+            //JasperReport jr = JasperCompileManager.compileReport(jasperDesign);
             //JOptionPane.showMessageDialog(null, conn);
             HashMap param = new HashMap();
             JasperPrint jp = JasperFillManager.fillReport(jr, param, cnn);
@@ -199,22 +212,27 @@ public class ReportGen extends javax.swing.JFrame {
             jPanel1.revalidate();
             cnn.close();
 
-        } catch (Exception e1) {
-            JOptionPane.showMessageDialog(null, e1.getMessage());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+            System.out.println(ex.getLocalizedMessage());
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-
-        Connection cnn = Connect.getConnection();
-        resetPanel();
-
         try {
-            //   String fileName = getClass().getClassLoader().getResource("src\\jasper\\reports\\example\\reports\\Courses3.jrxml").getFile();
-            String reportPath = "src\\co\\ke\\shardx\\jasper\\reports\\example\\reports\\Courses3.jrxml";
-            File theFile = new File(reportPath);
-            JasperDesign jasperDesign = JRXmlLoader.load(theFile);
+            
+            Connection cnn = Connect.getConnection();
+            resetPanel();
+
+             //String reportPath = "src\\co\\ke\\shardx\\jasper\\reports\\example\\reports\\Courses3.jrxml";
+           // File theFile = new File(reportPath);
+           String reportPath = "./reports/Courses3.jrxml";
+            System.out.println(reportPath);
+        InputStream input = this.getClass().getResourceAsStream(reportPath);
+           
+            JasperDesign jasperDesign = JRXmlLoader.load(input);
+         
             String strQuery;
             switch (jComboBox1.getSelectedItem().toString()) {
                 case "Level":
