@@ -15,6 +15,7 @@ public class JasperReportsExample {
      * @param args the command line arguments
      */
     public static void main(String[] args){
+        
         ReportGen rg=new ReportGen();
         rg.setVisible(true);
     

@@ -12,6 +12,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import com.mysql.jdbc.Driver;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 /**
  *
@@ -19,6 +25,7 @@ import com.mysql.jdbc.Driver;
  */
 public class Connect {
 
+  
     public Connect() {
 
     }
@@ -49,5 +56,17 @@ public class Connect {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
 
         }
+    }
+
+    public static void  reportFiles(InputStream io, String fileName)
+            throws IOException {
+        FileOutputStream fos = new FileOutputStream(fileName);
+        byte[] buf = new byte[256];
+        int read = 0;
+        while ((read = io.read(buf)) > 0) {
+            fos.write(buf, 0, read);
+
+        }
+   
     }
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ClassList" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fafc791e-0949-4378-81fd-1f0cebaad521">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="Cohort" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     CSR.`STUDENTID`,
+     STUD.`STUDENT_NAME`
+FROM
+     `STUDENTS` STUD INNER JOIN `COURSEENROLLMENT` CSR ON STUD.`STUDENTID` = CSR.`STUDENTID`
+]]>
+	</queryString>
+	<field name="STUDENTID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="STUDENT_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="119" y="41" width="100" height="20" uuid="0db69079-6314-480a-abc5-a0d36ed5d48e"/>
+				<text><![CDATA[STUDENT NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="41" width="100" height="20" uuid="1de53f16-56f9-4d0e-8447-e8b4dc829b3e"/>
+				<text><![CDATA[STUDENT ADM]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="13" y="0" width="100" height="20" uuid="96288ad3-087e-4876-9cba-d8726a877481"/>
+				<textFieldExpression><![CDATA[$F{STUDENTID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="119" y="0" width="223" height="20" uuid="99249a34-7ced-4ce9-bd92-feb805b5333f"/>
+				<textFieldExpression><![CDATA[$F{STUDENT_NAME}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="-1" width="752" height="1" uuid="b4808762-2548-44af-b10f-d7f00cdb6a09"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="-3" width="752" height="1" uuid="47b1560c-8dcb-4ae1-8dae-e59af6e85989"/>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -7,11 +7,17 @@ package co.ke.shardx.jasper.reports.example;
 
 import java.awt.BorderLayout;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -35,6 +41,8 @@ public class ReportGen extends javax.swing.JFrame {
      */
     public ReportGen() {
         initComponents();
+        CreateFiles();
+        populateClasses();
     }
 
     /**
@@ -53,11 +61,17 @@ public class ReportGen extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         jTextField1 = new javax.swing.JTextField();
+        jButton5 = new javax.swing.JButton();
+        cboCohort = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jButton1.setText("Show Report");
-        jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -75,7 +89,7 @@ public class ReportGen extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 895, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -90,7 +104,6 @@ public class ReportGen extends javax.swing.JFrame {
         });
 
         jButton4.setIcon(new javax.swing.ImageIcon("C:\\Users\\DELL\\Documents\\NetBeansProjects\\LOBI-College-MIS\\src\\lobi\\college\\mis\\resources\\gfx\\research.png")); // NOI18N
-        jButton4.setText("Search");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -104,12 +117,26 @@ public class ReportGen extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setText("Get");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        cboCohort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboCohort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboCohortActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jButton1)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -119,7 +146,12 @@ public class ReportGen extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4))
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cboCohort, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -133,7 +165,10 @@ public class ReportGen extends javax.swing.JFrame {
                         .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                        .addComponent(jComboBox1)))
+                        .addComponent(jComboBox1))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton5)
+                        .addComponent(cboCohort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -184,21 +219,20 @@ public class ReportGen extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
 
-        
         resetPanel();
         Connection cnn = Connect.getConnection();
         String reportPath = "reports/Courses3.jrxml";
 //      InputStream inputStream = this.getClass().getResourceAsStream(reportPath);
 //       System.out.println(inputStream != null);
-      try {
+        try {
 //             String url = this.getClass().getResource("reports/Courses3.jrxml").getPath();
 //        System.out.println(">>>"+url);
 //      }catch (Exception ex){
 //          System.out.println(ex.getMessage());
 //      }
 //     try { 
-         //JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
-       JasperReport jr = JasperCompileManager.compileReport(getClass().getResourceAsStream(reportPath));
+            //JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+            JasperReport jr = JasperCompileManager.compileReport(getClass().getResourceAsStream(reportPath));
 
             //JasperReport jr = JasperCompileManager.compileReport(jasperDesign);
             //JOptionPane.showMessageDialog(null, conn);
@@ -221,18 +255,19 @@ public class ReportGen extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         try {
-            
+
             Connection cnn = Connect.getConnection();
             resetPanel();
 
-             //String reportPath = "src\\co\\ke\\shardx\\jasper\\reports\\example\\reports\\Courses3.jrxml";
-           // File theFile = new File(reportPath);
-           String reportPath = "./reports/Courses3.jrxml";
+            //  String reportPath = "reports/Courses3.jas";
+            // File theFile = new File(reportPath);
+            // String reportPath = "./reports/Courses3.jrxml";
+            String reportPath = "rps/Courses3.jrxml";
             System.out.println(reportPath);
-        InputStream input = this.getClass().getResourceAsStream(reportPath);
-           
-            JasperDesign jasperDesign = JRXmlLoader.load(input);
-         
+            // InputStream input = this.getClass().getResourceAsStream(reportPath);
+            //
+            JasperDesign jasperDesign = JRXmlLoader.load(reportPath);
+
             String strQuery;
             switch (jComboBox1.getSelectedItem().toString()) {
                 case "Level":
@@ -277,6 +312,68 @@ public class ReportGen extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    // TODO add your handling code here:
+        try {
+
+            Connection cnn = Connect.getConnection();
+            resetPanel();
+
+            //  String reportPath = "reports/Courses3.jas";
+            // File theFile = new File(reportPath);
+            // String reportPath = "./reports/Courses3.jrxml";
+            String reportPath = "rps/classlist.jrxml";
+            System.out.println(reportPath);
+            // InputStream input = this.getClass().getResourceAsStream(reportPath);
+            //
+            JasperDesign jasperDesign = JRXmlLoader.load(reportPath);
+
+            String strQuery;
+            
+                    strQuery = "SELECT CSR.STUDENTID, STUD.STUDENT_NAME FROM STUDENTS STUD INNER JOIN COURSEENROLLMENT CSR ON STUD.STUDENTID=CSR.STUDENTID WHERE  CSR.Cohort='"+cboCohort.getSelectedItem() +"'";
+                  
+            //Build a new query
+            System.out.println(strQuery);
+            // update the data query
+            JRDesignQuery newQuery = new JRDesignQuery();
+            newQuery.setText(strQuery);
+            jasperDesign.setQuery(newQuery);
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+
+            JasperPrint jp = JasperFillManager.fillReport(jasperReport, null, cnn);
+            JRViewer vw = new JRViewer(jp);
+            jPanel1.setLayout(new BorderLayout());
+            jPanel1.repaint();
+            jPanel1.add(vw);
+            jPanel1.revalidate();
+            cnn.close();
+        } catch (Exception ex) {
+            String connectMsg = "Could not create the report " + ex.getMessage() + " " + ex.getLocalizedMessage();
+            System.out.println(connectMsg);
+        }
+
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        File file = new File("rps");
+        deleteFile(file);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void cboCohortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboCohortActionPerformed
+        // TODO add your handling code here:
+        System.out.println(cboCohort.getSelectedItem());
+    }//GEN-LAST:event_cboCohortActionPerformed
+    public static void deleteFile(File element) {
+        if (element.isDirectory()) {
+            for (File sub : element.listFiles()) {
+                deleteFile(sub);
+            }
+        }
+        element.delete();
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -313,13 +410,46 @@ public class ReportGen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cboCohort;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+
+    private void CreateFiles() {
+        new File("rps").mkdir();
+        try {
+            Connect.reportFiles(getClass().getResourceAsStream("reports/Courses3.jrxml"), "rps/Courses3.jrxml");
+            Connect.reportFiles(getClass().getResourceAsStream("reports/classList.jrxml"), "rps/classlist.jrxml");
+
+        } catch (IOException ex) {
+            Logger.getLogger(ReportGen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void populateClasses() {
+        String Query="SELECT * FROM cohorts WHERE cohorts.DeptID ='1'";
+        System.out.println(Query);
+          try {
+            Connection cnn = Connect.getConnection();
+            Statement st = cnn.createStatement();
+            cboCohort.removeAllItems();
+            ResultSet rs = st.executeQuery(Query);
+
+            while (rs.next()) {
+                cboCohort.addItem(rs.getString("cohortName"));
+            }
+
+        } catch (SQLException e) {
+
+            JOptionPane.showMessageDialog(this, "When Populating Cohorts," + e.getMessage(), "Error Occured", JOptionPane.ERROR_MESSAGE);
+
+        }
+    }
 
 }
